@@ -4,9 +4,12 @@ use App\Http\Controllers\VideoController;
 use Illuminate\Support\Facades\Route;
 
 // Authentication routes
-Route::get('/', function () {
+Route::get('/welcome', function () {
+    if (auth()->check()) {
+        return redirect()->route('videos.index');
+    }
     return view('welcome');
-});
+})->name('welcome');
 Route::get('/login', fn() => view('auth.login'))->name('login');
 Route::get('/register', fn() => view('auth.register'))->name('register');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
