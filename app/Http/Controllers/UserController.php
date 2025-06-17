@@ -7,12 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware('admin');
-    }
-
+    protected $middleware = ['auth', 'admin'];
     public function index()
     {
         return response()->json(['users' => User::all()->map(fn($user) => [
