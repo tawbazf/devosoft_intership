@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Video;
 use Illuminate\Http\Request;
 use App\Jobs\PackageVideo;
+use Firebase\JWT\JWT;
 
 class VideoController extends Controller
 {
@@ -26,4 +27,15 @@ class VideoController extends Controller
 
         return response()->json(['message' => 'Vidéo en cours de traitement']);
     }
+    public function show(Video $video) {
+    $token = JWT::encode([
+        'sub' => auth()->id(),
+        'video_id' => $video->id,
+        'exp' => now()->addMinutes(60)->timestamp
+    ], env('JWT_SECRET'), 'HS256');
+
+    $manifest_url = asset($video->manifest_url) . '?token=' . $token;
+
+    return view('player', compact('video', 'manifest_url'));
+}
 }
