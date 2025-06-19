@@ -9,3 +9,4 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
     Route::get('/videos', [AdminController::class, 'videos'])->name('admin.videos');
 });
+Route::middleware(['auth'])->get('/videos/{video}', [VideoController::class, 'show']);
