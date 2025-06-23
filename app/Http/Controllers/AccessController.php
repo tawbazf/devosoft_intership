@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Video;
 use Firebase\JWT\JWT;
+use Illuminate\Support\Facades\Auth;
+
 
 class AccessController extends Controller
 {
     public function getAccess(Video $video)
     {
         $payload = [
-            'sub' => auth()->id(),
+            'sub' => Auth::id(),
             'video_id' => $video->id,
             'exp' => now()->addMinutes(60)->timestamp
         ];

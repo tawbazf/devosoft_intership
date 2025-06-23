@@ -5,6 +5,8 @@ use App\Models\Video;
 use Illuminate\Http\Request;
 use App\Jobs\PackageVideo;
 use Firebase\JWT\JWT;
+use Illuminate\Support\Facades\Auth;
+
 
 class VideoController extends Controller
 {
@@ -29,7 +31,7 @@ class VideoController extends Controller
     }
     public function show(Video $video) {
     $token = JWT::encode([
-        'sub' => auth()->id(),
+        'sub' => Auth::id(),
         'video_id' => $video->id,
         'exp' => now()->addMinutes(60)->timestamp
     ], env('JWT_SECRET'), 'HS256');

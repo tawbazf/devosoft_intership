@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
-
+use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
 public function login(Request $request) {
@@ -31,6 +31,7 @@ return response()->json(['token' => $token]);
 }
 
 public function me() {
-return response()->json(auth()->user());
+    return response()->json(Auth::user());
 }
+
 }

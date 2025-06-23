@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -12,7 +13,8 @@ class LicenseController extends Controller
     {
         $response = Http::post('https://license.example.com/api/licenses', [
             'video_id' => $video->id,
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
+,
         ]);
 
         if ($response->ok()) {
