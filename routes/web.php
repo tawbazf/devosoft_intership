@@ -4,6 +4,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
+Route::get('/', function () {
+    return view('welcome');
+});
 
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
@@ -11,3 +14,4 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     Route::get('/videos', [AdminController::class, 'videos'])->name('admin.videos');
 });
 Route::middleware(['auth'])->get('/videos/{video}', [VideoController::class, 'show']);
+Route::get('/videos', [VideoController::class, 'index']);

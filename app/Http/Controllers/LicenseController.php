@@ -14,7 +14,6 @@ class LicenseController extends Controller
         $response = Http::post('https://license.example.com/api/licenses', [
             'video_id' => $video->id,
             'user_id' => Auth::id(),
-,
         ]);
 
         if ($response->ok()) {
