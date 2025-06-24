@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Jobs\PackageVideo;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Auth;
+use App\Services\VideoProcessingService;
 
 
 class VideoController extends Controller
@@ -40,4 +41,36 @@ class VideoController extends Controller
 
     return view('player', compact('video', 'manifest_url'));
 }
+protected $videoProcessor;
+
+    public function __construct(VideoProcessingService $videoProcessor)
+    {
+        $this->videoProcessor = $videoProcessor;
+    }
+
+    public function upload(Request $request)
+    {
+        $request->validate([
+            'video' => 'required|file|mimetypes:video/mp4,video/quicktime',
+        ]);
+
+        $path = $request->file('video')->store('uploads');
+
+        // Appelle FastAPI
+        $result = $this->videoProcessor->uploadVideo(storage_path('app/' . $path));
+
+        // Crée la vidéo dans la base Laravel
+        $video = Video::create([
+            'title' => $request->input('title', 'Sans titre'),
+            'manifest_url' => $result['manifest_url'],
+            'license_url' => '', // à remplir si tu as l’URL licence
+            'hls_url' => $result['hls_url'] ?? null,
+            'path' => $path,
+        ]);
+
+        return response()->json([
+            'message' => 'Vidéo uploadée et traitée avec succès',
+            'video' => $video,
+        ]);
+    }
 }
